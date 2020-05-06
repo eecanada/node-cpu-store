@@ -8,9 +8,12 @@ console.log(laptopData)
 
 
 const server = http.createServer((req,res)=>{
-  console.log('server accessed')
+  // this is a header for the res.end response
+  res.writeHead(200, {'Content-type': 'text/html '})
+  res.end ('this is the response')
 }) 
 
 server.listen(1337, '127.0.0.1', ()=>{
   console.log('listening for request ')
 })
+
