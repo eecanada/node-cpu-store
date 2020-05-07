@@ -2,7 +2,7 @@ const fs = require('fs')
 const http = require('http')
 const url = require('url') //routing
 
-const json = fs.readFileSync(`${__dirname}/data/data.json`, 'utf-8')
+const json = fs.readFileSync(`${__dirname}/data/data.json`, 'utf-8') //grabing my json data
 const laptopData = JSON.parse(json) // goes from json to javascript object
 
 
@@ -19,7 +19,17 @@ const server = http.createServer((req,res)=>{
   
   else if (pathName === '/laptop' && id < laptopData.length){
      res.writeHead(200, {'Content-type':'text/html'})
-     res.end(`this is the LAPTOP page for the laptop ${id}!`)
+     fs.readFile(`${__dirname}/templates/template-laptop.html`,'utf-8', (err, data)=>{
+        const laptop = laptopData[id]
+        let output = data.replace(/{%PRODUCTNAME%}/g, laptop.productName) 
+        output = output.replace(/{%IMAGE%}/g, laptop.image)
+        output = output.replace(/{%PRICE%}/g, laptop.price)
+        output = output.replace(/{%CPU%}/g, laptop.cpu)
+        output = output.replace(/{%STORAGE%}/g, laptop.storage)
+        output = output.replace(/{%RAM%}/g, laptop.ram)
+        output = output.replace(/{%DESCRIPTION%}/g, laptop.description)
+        res.end(output)
+     })
   }
   else {
     res.writeHead(400, {'Content-type': 'text/html'})
